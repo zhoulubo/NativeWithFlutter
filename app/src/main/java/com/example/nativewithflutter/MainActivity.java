@@ -1,21 +1,26 @@
 package com.example.nativewithflutter;
 
+import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.view.View;
 
 import io.flutter.facade.Flutter;
 import io.flutter.facade.FlutterFragment;
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String CHANNEL = "samples.flutter.io/battery";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +38,14 @@ public class MainActivity extends AppCompatActivity {
 //                layout.leftMargin = 100;
 //                layout.topMargin = 200;
 //                addContentView(flutterView, layout);
-
+                // 创建一个FlutterFragment
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 FlutterFragment route1Fragment = Flutter.createFragment("route1");
                 fragmentTransaction.replace(R.id.flutter_fragment_content, route1Fragment).commit();
 
             }
         });
+
     }
 
     @Override
@@ -63,4 +69,27 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    // 调用Flutter的
+    public void method_channel(View view) {
+
+
+    }
+
+
+    private int getBatteryLevel() {
+        int batteryLevel = -1;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+            batteryLevel = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+        } else {
+            Intent intent = new ContextWrapper(getApplicationContext()).
+                    registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            batteryLevel = (intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) * 100) /
+                    intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        }
+
+        return batteryLevel;
+    }
+
 }

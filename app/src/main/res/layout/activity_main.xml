@@ -26,16 +26,27 @@
 
     <FrameLayout
         android:id="@+id/flutter_fragment_content"
-        android:layout_marginTop="100dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="250dp"
+        android:layout_marginTop="100dp" />
+
+    <TextView
+        android:id="@+id/flutter_method_channel_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="method_channel"
+        app:layout_anchor="@+id/flutter_fragment_content"
+        app:layout_anchorGravity="bottom|center"
+        android:onClick="method_channel"
+
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_margin="50dp"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </android.support.design.widget.CoordinatorLayout>
